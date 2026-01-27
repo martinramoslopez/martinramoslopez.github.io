@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="global.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+  <h1>Kvíz: Identifikace a řešení problémů</h1>
+
+  <form id="quizForm">
+
+    <div class="question">
+      <h3>1. Co je nejlepší udělat jako úplně první krok při řešení technického problému?</h3>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a"> Okamžitě vyměnit podezřelou součástku</label>
+        <label><input type="radio" name="q1" value="b"> Zjistit, zda je problém softwarový, nebo hardwarový</label>
+        <label><input type="radio" name="q1" value="c"> Přeinstalovat celý operační systém</label>
+        <label><input type="radio" name="q1" value="d"> Zavolat kamaráda, co tomu rozumí</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>2. Která z těchto metod NEPATŘÍ mezi běžné způsoby detekce hardwarového problému?</h3>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a"> Kontrola ve Správci zařízení (Device Manager)</label>
+        <label><input type="radio" name="q2" value="b"> Vypojení všech periferních zařízení</label>
+        <label><input type="radio" name="q2" value="c"> Spuštění počítače v nouzovém režimu</label>
+        <label><input type="radio" name="q2" value="d"> Kontrola, zda je vše pevně zapojené</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>3. Co je nejčastější první krok při podezření na softwarový problém?</h3>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a"> Výměna grafické karty</label>
+        <label><input type="radio" name="q3" value="b"> Spustit počítač v nouzovém režimu (Safe Mode)</label>
+        <label><input type="radio" name="q3" value="c"> Formátovat disk</label>
+        <label><input type="radio" name="q3" value="d"> Koupit nový počítač</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>4. Která činnost patří mezi PREVENCI technických problémů?</h3>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a"> Čekat, až se počítač sám pokazí</label>
+        <label><input type="radio" name="q4" value="b"> Pravidelné čištění od prachu + zálohování dat</label>
+        <label><input type="radio" name="q4" value="c"> Každý týden přeinstalovávat Windows</label>
+        <label><input type="radio" name="q4" value="d"> Vypínat počítač jen tehdy, když zhasne proud</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>5. Proč je důležité po vyřešení problému provést ověření?</h3>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> Aby se dalo rychleji jít domů</label>
+        <label><input type="radio" name="q5" value="b"> Zjistit, zda problém skutečně zmizel a nevrací se</label>
+        <label><input type="radio" name="q5" value="c"> Aby to vypadalo, že něco děláme</label>
+        <label><input type="radio" name="q5" value="d"> Počítač to vyžaduje sám od sebe</label>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>6. K čemu slouží zdokumentování problému a řešení?</h3>
+      <div class="options">
+        <label><input type="radio" name="q6" value="a"> Aby bylo co číst při obědě</label>
+        <label><input type="radio" name="q6" value="b"> Rychlejší řešení stejného problému v budoucnu + pomoc ostatním</label>
+        <label><input type="radio" name="q6" value="c"> Aby se to dalo prodat jako kniha</label>
+        <label><input type="radio" name="q6" value="d"> Počítač si to sám zapisuje do deníčku</label>
+      </div>
+    </div>
+
+    <button type="button" id="submitBtn">Odeslat a vyhodnotit</button>
+
+  </form>
+
+  <div id="result">
+    <div class="score" id="scoreText"></div>
+    <div id="detailedResult"></div>
+  </div>
+</div>
+
+<script>
+  const correctAnswers = {
+    q1: "b",
+    q2: "c",
+    q3: "b",
+    q4: "b",
+    q5: "b",
+    q6: "b"
+  };
+
+  const explanations = {
+    q1: "Nejdřív musíme zjistit, jestli je problém v hardwaru nebo softwaru – to je základní krok.",
+    q2: "Nouzový režim slouží hlavně k odhalení softwarových problémů (drivery, služby, programy).",
+    q3: "Safe Mode je klasický první test při podezření na softwarový problém.",
+    q4: "Pravidelná údržba + zálohy = nejlepší prevence.",
+    q5: "Ověření je klíčové – problém se může vrátit nebo maskovat jiný problém.",
+    q6: "Dokumentace šetří čas v budoucnu a pomáhá kolegům / dalším správcům."
+  };
+
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    let score = 0;
+    let total = 6;
+    let html = "";
+
+    for (let i = 1; i <= total; i++) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      const questionDiv = document.querySelector(`.question:nth-child(${i})`);
+
+      if (!selected) {
+        html += `<p class="wrong">Otázka ${i}: Nevybrána odpověď → 0 bodů</p>`;
+        continue;
+      }
+
+      const value = selected.value;
+      const isCorrect = value === correctAnswers[`q${i}`];
+
+      if (isCorrect) {
+        score++;
+        html += `<p class="correct">Otázka ${i}: Správně ✓</p>`;
+      } else {
+        html += `<p class="wrong">Otázka ${i}: Špatně ✗</p>`;
+      }
+
+      html += `<div class="explanation">${explanations[`q${i}`]}</div><br>`;
+    }
+
+    document.getElementById("scoreText").innerHTML = `Skóre: ${score} / ${total} (${Math.round(score/total*100)} %)`;
+    document.getElementById("detailedResult").innerHTML = html;
+    document.getElementById("result").style.display = "block";
+    document.getElementById("submitBtn").disabled = true;
+  });
+</script>
+</body>
+</html>
